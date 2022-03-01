@@ -1,7 +1,5 @@
 import random
 
-from numpy import empty
-
 class Board:
     def __init__(self) -> None:
         self.board = []
@@ -29,58 +27,6 @@ class Board:
                 if (self.board[i][j] == 0):
                     return False
         return True
-
-    # def shuffle(self, direction):
-    #     # down
-    #     for i in range(4):
-    #         empty = []
-    #         for j in reversed(range(4)):
-    #             if (self.board[i][j] == 0):
-    #                 empty.append(j)
-    #             elif (len(empty) > 0):
-    #                 index = max(empty)
-    #                 self.board[i][index] = self.board[i][j]
-    #                 self.board[i][j] = 0
-    #                 empty.remove(index)
-    #                 empty.append(j)
-    #    
-    #     # up
-    #     for i in range(4):
-    #         empty = []
-    #         for j in range(4):
-    #             if (self.board[i][j] == 0):
-    #                 empty.append(j)
-    #             elif (len(empty) > 0):
-    #                 index = min(empty)
-    #                 self.board[i][index] = self.board[i][j]
-    #                 self.board[i][j] = 0
-    #                 empty.remove(index)
-    #                 empty.append(j)
-    #     # left
-    #     for i in range(4):
-    #         empty = []
-    #         for j in range(4):
-    #             if (self.board[j][i] == 0):
-    #                 empty.append(j)
-    #             elif (len(empty) > 0):
-    #                 index = min(empty)
-    #                 self.board[index][i] = self.board[j][i]
-    #                 self.board[j][i] = 0
-    #                 empty.remove(index)
-    #                 empty.append(j)
-    #
-    #     # right
-    #     for i in range(4):
-    #         empty = []
-    #         for j in reversed(range(4)):
-    #             if (self.board[j][i] == 0):
-    #                 empty.append(j)
-    #             elif (len(empty) > 0):
-    #                 index = max(empty)
-    #                 self.board[index][i] = self.board[j][i]
-    #                 self.board[j][i] = 0
-    #                 empty.remove(index)
-    #                 empty.append(j)
 
     def shuffle(self, direction):
         for i in range(4):
@@ -118,18 +64,3 @@ class Board:
         print(f' {self.board[0][2]} {self.board[1][2]} {self.board[2][2]} {self.board[3][2]}')
         print(f' {self.board[0][3]} {self.board[1][3]} {self.board[2][3]} {self.board[3][3]}')
 
-
-# Testing 
-# board = Board()
-# board.add_new_num()
-# board.add_new_num()
-# board.add_new_num()
-# board.add_new_num()
-# board.add_new_num()
-# # board.add_new_num()
-# # board.add_new_num()
-# # board.add_new_num()
-# board.print_state()
-# board.shuffle('r')
-# print()
-# board.print_state()
