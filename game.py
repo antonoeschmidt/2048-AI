@@ -4,8 +4,7 @@ valid_moves = ['w', 'a', 's', 'd'] # WASD controls
 
 def start_game():
     board = Board()
-    # board.add_new_num()
-    board.board[0][0] = 2
+    board.add_new_num()
     board.print_state()
     while(True):
         x = input()
