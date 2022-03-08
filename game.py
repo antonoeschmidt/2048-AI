@@ -4,10 +4,8 @@ valid_moves = ['w', 'a', 's', 'd'] # WASD controls
 
 def start_game():
     board = Board()
-    board.add_new_num()
+    # board.add_new_num()
     board.board[0][0] = 2
-    board.board[1][0] = 2
-    board.board[3][0] = 2
     board.print_state()
     while(True):
         x = input()
@@ -20,8 +18,9 @@ def start_game():
             return
         
         if (x in valid_moves):
-            board.shuffle(x)
-            board.add_new_num()
+            """ If shuffle returns true, then it means that the board has changed and we can add a new number"""
+            if (board.shuffle(x)):
+                board.add_new_num()            
             board.print_state()
         else:
             print('Not a valid move')

@@ -1,5 +1,5 @@
-from heapq import merge
 import random
+import numpy as np
 
 class Board:
     def __init__(self) -> None:
@@ -31,6 +31,9 @@ class Board:
 
     def shuffle(self, direction):
         """ WASD controls: w = up, a = left, s = down, d = right """
+        """Init before state, to see if board changes with chosen direction """
+        before = np.array(self.board.copy())
+
         for i in range(4):
             empty = []
             changed = []
@@ -49,12 +52,9 @@ class Board:
                         self.board[i][j] = 0
                         empty.remove(index)
                         empty.append(j)
-                        test = self.board[j][i]
                         if (self.merge(i, index, direction, changed)):
                             empty.append(index)
-
                     else:
-                        test = self.board[j][i]
                         if (self.merge(i, j, direction, changed)):
                             empty.append(j)
 
@@ -68,15 +68,19 @@ class Board:
                         self.board[j][i] = 0
                         empty.remove(index)
                         empty.append(j)
-                        test = self.board[j][i]
-                        # self.merge(j, index, direction, changed)
                         if (self.merge(index, i, direction, changed)):
                             empty.append(index)
                     else:
-                        test = self.board[j][i]
                         if(self.merge(j, i, direction, changed)):
                             empty.append(j)
-                
+        
+        after = np.array(self.board.copy())
+
+        """ Check is board has changed. If not, no valid moves for this direction """
+        """ We return False if no valid moves if present for this direction """
+        return not (before == after).all()
+     
+
     def merge(self, i, j, direction, changed):
         if (direction == 'd'):
             if (i > 2):
@@ -94,25 +98,23 @@ class Board:
         modifier = -1 if (direction == 'w' or  direction =='a') else 1
 
         if (direction == 'w' or direction == 's'):
-            a1 = self.board[i][j]
-            a2 = self.board[i][j+modifier]
             if ((self.board[i][j] == self.board[i][j+modifier]) and self.board[i][j] != 0):
-                print("Double found")
                 self.board[i][j+modifier] *= 2
                 self.board[i][j] = 0
                 return True
 
         else:
-            a1 = self.board[i][j]
-            a2 = self.board[i+modifier][j]
             if ((self.board[i][j] == self.board[i+modifier][j]) and self.board[i][j] != 0):
-                print("Double found")
                 self.board[i+modifier][j] *= 2
                 self.board[i][j] = 0
                 return True
-
- 
-        
+    
+    def check_move(self, direction):
+        # left
+        if (direction == 'a'):
+            for i in range(4):
+                for j in range(4):
+                    self.board[j][i]
 
     def print_state(self):
         print(f' {self.board[0][0]} {self.board[1][0]} {self.board[2][0]} {self.board[3][0]}')
