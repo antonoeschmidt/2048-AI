@@ -1,5 +1,6 @@
 import random
 import numpy as np
+import math
 
 class Board:
     def __init__(self) -> None:
@@ -21,18 +22,16 @@ class Board:
             j = random.randint(0,3)
 
         self.board[i][j] = new_num
+    
+    def custom_add_new_num(self, i, j, num):
+        """ Is used for determining all possible spawns of numbers """
+        self.board[i][j] = num
 
-    def is_full(self):
-        for i in range(4):
-            for j in range(4):
-                if (self.board[i][j] == 0):
-                    return False
-        return True
-
-    def shuffle(self, direction):
+    def move(self, direction, do_move):
         """ WASD controls: w = up, a = left, s = down, d = right """
         """Init before state, to see if board changes with chosen direction """
-        before = np.array(self.board.copy())
+        before_matrix = self.board.copy()
+        before = np.array(before_matrix)
 
         for i in range(4):
             empty = []
@@ -74,11 +73,14 @@ class Board:
                         if(self.merge(j, i, direction, changed)):
                             empty.append(j)
         
-        after = np.array(self.board.copy())
+        after_matrix = np.array(self.board.copy())
+
+        if (do_move is False):
+            self.board = before
 
         """ Check is board has changed. If not, no valid moves for this direction """
         """ We return False if no valid moves if present for this direction """
-        return not (before == after).all()
+        return not (before_matrix == after_matrix).all()
      
 
     def merge(self, i, j, direction, changed):
@@ -109,12 +111,25 @@ class Board:
                 self.board[i][j] = 0
                 return True
     
-    def check_move(self, direction):
-        # left
-        if (direction == 'a'):
-            for i in range(4):
-                for j in range(4):
-                    self.board[j][i]
+    def calculate_score(self):
+        """ Also calculates new spawns into the score. The official rules does not """
+        score = 0
+        for i in range(4):
+            for j in range(4):
+                square_value = self.board[i][j]
+                exponant = 1
+                while(square_value > 2):
+                    square_value = square_value/2
+                    exponant += 1
+                score += (exponant-1)* math.pow(2,exponant)
+        return int(score)
+
+    def has_won(self):
+        for i in range(4):
+            for j in range(4):
+                if (self.board[i][j] == 2048):
+                    return True
+        return False
 
     def print_state(self):
         print(f' {self.board[0][0]} {self.board[1][0]} {self.board[2][0]} {self.board[3][0]}')
