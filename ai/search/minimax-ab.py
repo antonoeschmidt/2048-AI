@@ -40,7 +40,9 @@ class minimax():
            return game.utility(state)
 
         v, move = b
-        actions = game.spawm_actions(state)
+        actions, _ = game.chance(state)
+
+        
 
         ## Generates states for each possible action in current state
         for action in actions:
