@@ -5,7 +5,6 @@ class minimax():
     
     ## Method to start minimax search using DFS
     def __call__(self, game, state):
-        self.player = game.to_move()
         value,move = self.max_val(game, state)
         return move
 
@@ -14,7 +13,7 @@ class minimax():
         
         ## Checks if game is over, or if depth restriction in DFS is met
         if game.is_terminal() or depth > self.max_depth:
-            return game.utility(state, self.player)
+            return game.utility(state)
 
         v, move = -np.inf
         actions = game.actions(state)
@@ -35,7 +34,7 @@ class minimax():
 
         ## Checks if game is over
         if game.is_terminal():
-           return game.utility(state, self.player)
+           return game.utility(state)
 
         v, move = np.inf
         actions = game.spawm_actions(state)
