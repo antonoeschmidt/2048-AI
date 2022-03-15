@@ -5,7 +5,7 @@ class minimax():
     
     ## Method to start minimax search using DFS
     def __call__(self, game, state):
-        value,move = self.max_val(game, state, -np.inf, np.inf)
+        value,move = self.max_val(game, state, 0, -np.inf, np.inf)
         return move
 
     ## Acts as player
