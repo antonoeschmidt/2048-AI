@@ -1,9 +1,11 @@
 class Agent():
-    def __init__(self, program=None):
-        self.program = program 
+    def __init__(self, program=None, strategy = None):
+        self.program = program
+        self.strategy = strategy
       
 
-    def make_move(self,percept):
-        return self.program(percept)    
+    def make_move(self):
+        return self.strategy(self.program.percept)  
+
 
 
