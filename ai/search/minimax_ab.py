@@ -1,5 +1,5 @@
 import numpy as np
-class minimax():
+class MinimaxAB():
     def __init__(self, max_depth = None):
         self.max_depth = max_depth
     
@@ -12,10 +12,10 @@ class minimax():
     def max_val(self,game, state, depth, a, b):
         
         ## Checks if game is over, or if depth restriction in DFS is met
-        if game.is_terminal() or depth > self.max_depth:
-            return game.utility(state)
+        if game.is_terminal(state) or depth > self.max_depth:
+            return game.utility(state), 'w'
 
-        v, move = a
+        v = a
         actions = game.actions(state)
         
         ## Generates states for each possible action in current state
@@ -36,25 +36,36 @@ class minimax():
     def min_val(self, game, state, depth, a, b):
 
         ## Checks if game is over
-        if game.is_terminal():
-           return game.utility(state)
+        if game.is_terminal(state):
+           return game.utility(state), 'w'
 
-        v, move = b
-        actions, _ = game.chance(state)
+        v, move = b, 'w'
+        states, _ = game.chance(state)  
 
-        
+        #print(state.fill_rate(state))
+
+        fill_value = state.fill_rate(state)    
 
         ## Generates states for each possible action in current state
-        for action in actions:
-           new_state = game.result(state,action)
-           v2, a2 = self.max_val(game,new_state,depth+1, a, b)
+        for index, new_state in enumerate(states):
+
+
+            # if index > depth + 1:
+            #     break
+
+            if fill_value < 0.8:
+                # print(fill_value)
+                if index > depth + 1:
+                    break
+            
+            v2, a2 = self.max_val(game,new_state,depth+1, a, b)
             
             ## Checks if action results in a worse outcome
-           if v2 < v:
-               v,move = v2,action
+            if v2 < v:
+               v, move = v2, a2
                b = min(b,v)
             
-           if v <= a:
+            if v <= a:
                 break
         
         return v, move

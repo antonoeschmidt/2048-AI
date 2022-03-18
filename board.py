@@ -1,14 +1,19 @@
 import random
 import numpy as np
 import math
+from copy import deepcopy
+from game import Game
+from ai.agent import Agent
+class Board(Game):
 
-class Board:
     def __init__(self) -> None:
         self.board = []
         self.create_board()
+        self.valid_actions = ['w', 'a', 's', 'd'] # WASD controls
+
 
     def create_board(self):
-        for i in range(4):
+        for _ in range(4):
             self.board.append([0] * 4)
     
     def add_new_num(self):
@@ -35,7 +40,6 @@ class Board:
 
         for i in range(4):
             empty = []
-            changed = []
             if (direction == 'w' or direction == 'a'):
                 order = range(4)
             else:
@@ -51,10 +55,10 @@ class Board:
                         self.board[i][j] = 0
                         empty.remove(index)
                         empty.append(j)
-                        if (self.merge(i, index, direction, changed)):
+                        if (self.merge(i, index, direction)):
                             empty.append(index)
                     else:
-                        if (self.merge(i, j, direction, changed)):
+                        if (self.merge(i, j, direction)):
                             empty.append(j)
 
                         
@@ -67,10 +71,10 @@ class Board:
                         self.board[j][i] = 0
                         empty.remove(index)
                         empty.append(j)
-                        if (self.merge(index, i, direction, changed)):
+                        if (self.merge(index, i, direction)):
                             empty.append(index)
                     else:
-                        if(self.merge(j, i, direction, changed)):
+                        if(self.merge(j, i, direction)):
                             empty.append(j)
         
         after_matrix = np.array(self.board.copy())
@@ -83,7 +87,7 @@ class Board:
         return not (before_matrix == after_matrix).all()
      
 
-    def merge(self, i, j, direction, changed):
+    def merge(self, i, j, direction):
         if (direction == 'd'):
             if (i > 2):
                 return False
@@ -137,3 +141,86 @@ class Board:
         print(f' {self.board[0][2]} {self.board[1][2]} {self.board[2][2]} {self.board[3][2]}')
         print(f' {self.board[0][3]} {self.board[1][3]} {self.board[2][3]} {self.board[3][3]}')
 
+    def utility(self, state):
+        if (state.has_won()):
+            return 1
+        elif (len(self.actions(state)) > 0):
+            return 0.5
+        else:
+            return 0
+
+    def actions(self, state):
+        possible_actions = []
+        for action in self.valid_actions:
+            if (state.move(action, False)):
+                possible_actions.append(action)
+
+        return possible_actions
+
+    def is_terminal(self, state):
+        return (len(self.actions(state)) < 1) or state.has_won()
+
+    def result(self, state, action):
+        state_copy = deepcopy(state)
+        state_copy.move(action, True)
+        return state_copy
+        # return state_copy.board
+
+    def chance(self, state):
+        possible_boards = []
+        probabilities = []
+        for i in range(4):
+            for j in range(4):
+                if (state.board[i][j] == 0):
+                    for num in [2,4]:
+                        state_copy = deepcopy(state)
+                        state_copy.custom_add_new_num(i, j, num)
+                        possible_boards.append(state_copy)
+
+        for index in range(len(possible_boards)):
+            if (index % 2 == 0):
+                probabilities.append(0.9/(len(possible_boards)/2))
+            else: 
+                probabilities.append(0.1/(len(possible_boards)/2))
+
+        return possible_boards, probabilities
+
+    def fill_rate(self, state):
+        count = 0
+        for i in range(4):
+            for j in range(4):
+                if (state.board[i][j] == 0):
+                    count += 1
+        
+        return (16-count) / 16
+
+    def start_game(self, agent: Agent):
+        board = agent.program.problem
+        board.add_new_num()
+        board.print_state()
+
+        while(True):
+            if (agent.program.search == "human"):
+                action = input()
+                if action == 'q':
+                    break
+            else:
+                action = agent.make_move()
+
+            """ Check if board is full"""
+            if (self.is_terminal(board)):
+                print("Game over")
+                return
+            
+            if (action in self.valid_actions):
+                """ If shuffle returns true, then it means that the board has changed and we can add a new number"""
+
+                if (board.move(action, True)):
+                    board.add_new_num()            
+                board.print_state()
+                print(f'Score: {board.calculate_score()}')
+
+            else:
+                print('Not a valid move')
+            
+        print('Finished')

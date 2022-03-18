@@ -1,14 +1,14 @@
+from ai.search.minimax import Minimax
+from game import Game
+
 class Program():
-    def __init__(self, problem = None, search = None):
+    def __init__(self, problem: Game, search):
         self.problem = problem
         self.search = search
-        self.percept
 
-    def __call__(self, percept):
-        return self.search(self.problem, percept)
+    def __call__(self):
+        return self.search(self.problem, self.problem)
 
-    def update_state():
-        pass
 
     
 

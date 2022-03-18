@@ -1,5 +1,5 @@
 import numpy as np
-class minimax():
+class Expectimax():
     def __init__(self, max_depth = None):
         self.max_depth = max_depth
     
