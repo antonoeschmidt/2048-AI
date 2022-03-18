@@ -115,12 +115,12 @@ class Board(Game):
                 self.board[i][j] = 0
                 return True
     
-    def calculate_score(self):
+    def calculate_score(self, state):
         """ Also calculates new spawns into the score. The official rules does not """
         score = 0
         for i in range(4):
             for j in range(4):
-                square_value = self.board[i][j]
+                square_value = state.board[i][j]
                 exponant = 1
                 while(square_value > 2):
                     square_value = square_value/2
@@ -143,11 +143,11 @@ class Board(Game):
 
     def utility(self, state):
         if (state.has_won()):
-            return 1
+            return 1 * self.calculate_score(state)
         elif (len(self.actions(state)) > 0):
-            return 0.5
+            return 0.5 * self.calculate_score(state)
         else:
-            return 0
+            return 0 
 
     def actions(self, state):
         possible_actions = []
@@ -218,7 +218,7 @@ class Board(Game):
                 if (board.move(action, True)):
                     board.add_new_num()            
                 board.print_state()
-                print(f'Score: {board.calculate_score()}')
+                print(f'Score: {board.calculate_score(board)}')
 
             else:
                 print('Not a valid move')

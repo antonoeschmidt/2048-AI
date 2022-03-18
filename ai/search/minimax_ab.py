@@ -53,10 +53,10 @@ class MinimaxAB():
             # if index > depth + 1:
             #     break
 
-            if fill_value < 0.8:
-                # print(fill_value)
-                if index > depth + 1:
-                    break
+            # if fill_value < 0.45:
+            #     # print(fill_value)
+            #     if index > depth + 1:
+            #         break
             
             v2, a2 = self.max_val(game,new_state,depth+1, a, b)
             
