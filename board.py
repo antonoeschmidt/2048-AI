@@ -164,7 +164,6 @@ class Board(Game):
         state_copy = deepcopy(state)
         state_copy.move(action, True)
         return state_copy
-        # return state_copy.board
 
     def chance(self, state):
         possible_boards = []

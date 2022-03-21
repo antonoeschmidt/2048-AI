@@ -22,12 +22,3 @@ class Game():
     def start_game(self, agent):
         return NotImplementedError
  
-    # def play_game(self, players):
-    #     state = self.initial
-    #     while True:
-    #         for player in players:
-    #             move = player.make_move(self, state)
-    #             state = self.result(state, move)
-    #             if self.terminal_test(state):
-    #                 self.display(state)
-    #                 return self.utility(state, self.to_move(self.initial))
