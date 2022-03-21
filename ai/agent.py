@@ -7,7 +7,6 @@ class Agent():
 
     def make_move(self):
         return self.program()
-        # self.strategy(self.program.percept)  
 
 
 
