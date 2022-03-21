@@ -11,6 +11,10 @@ class Expectimax():
     ## Acts as player
     def max_val(self,game, state, depth):
         
+        if self.max_depth > 1 and depth > 1:
+            if game.fill_rate(state) > 3:
+                depth += self.max_depth    
+
         ## Checks if game is over, or if depth restriction in DFS is met
         if game.is_terminal(state) or depth > self.max_depth:
             return game.utility(state), 'w'
@@ -21,6 +25,8 @@ class Expectimax():
         ## Generates states for each possible action in current state
         for action in actions:
             new_state = game.result(state,action)
+
+            
             v2,a2 = self.chance(game, new_state, depth)
 
             ## Checks if action results in a better outcome
