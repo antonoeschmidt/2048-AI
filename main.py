@@ -6,8 +6,8 @@ from ai.search.minimax_ab import MinimaxAB
 from ai.search.expectimax import Expectimax
 
 minimax = Minimax(1)
-minimax_ab = MinimaxAB(2)
-expectimax = Expectimax(1)
+minimax_ab = MinimaxAB(1)
+expectimax = Expectimax(2)
 algorithm = 0
 choice = 0
 gamemode = 0

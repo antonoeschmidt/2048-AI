@@ -191,7 +191,7 @@ class Board(Game):
                 if (state.board[i][j] == 0):
                     count += 1
         
-        return (16-count) / 16
+        return count
 
     def start_game(self, agent: Agent):
         board = agent.program.problem
